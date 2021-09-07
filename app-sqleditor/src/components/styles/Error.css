@@ -1,0 +1,17 @@
+.Error {
+  width: 100%;
+  min-height: calc(100vh - 60px);
+  background-repeat: repeat;
+
+  color: #212F3D;
+
+  display: flex;
+  align-items: center;
+}
+
+.Error__col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
