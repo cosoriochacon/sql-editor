@@ -65,6 +65,8 @@ const EditorSqlCreate = () => {
     let query = querys.querys[0];
     let query2 = query.split("(");
     let query3 = query2[1].split(")");
+    let columns = query3[0];
+    let arr_columns = columns.split(",");
     let query4 = query3[0].split(",");
     let fields = query4.toString();
     let t1 = query.replace(regex, "");
@@ -77,8 +79,8 @@ const EditorSqlCreate = () => {
       fields: fields,
       table: table,
     };
-    let body = { namedb: table, text: "" };
-    const res = await Https.post("file", body);
+    let body = { nameTable: table, columns: arr_columns };
+    const res = await Https.post("file/create", body);
     if (res.status === 1) {
       dispatch({ type: "REMOVE_QUERY", payload: "" });
       setSelectedDB(null);

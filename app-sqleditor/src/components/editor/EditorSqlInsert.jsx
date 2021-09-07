@@ -41,7 +41,6 @@ const EditorSqlInsert = () => {
 
   const getDatabases = async () => {
     const res = await Https.get("database/querys");
-    console.log(res.data);
     setDatabase(res.data);
   };
 
@@ -84,8 +83,8 @@ const EditorSqlInsert = () => {
     let arr_vals = v2.split(",");
 
     if (arr_cols.length === arr_vals.length) {
-      let body = { namedb: nameTable, text: v2 };
-      const res = await Https.post("file", body);
+      let body = { nameTable: nameTable, data: arr_vals };
+      const res = await Https.post("file/write", body);
       if (res.status === 1) {
         setIsReload(true);
         setDefaultValue(null);
