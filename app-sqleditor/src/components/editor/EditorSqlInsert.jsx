@@ -81,9 +81,8 @@ const EditorSqlInsert = () => {
     let v1 = vals.replace("(", "");
     let v2 = v1.replace(");", "");
     let arr_vals = v2.split(",");
-
     if (arr_cols.length === arr_vals.length) {
-      let body = { nameTable: nameTable, data: arr_vals };
+      let body = { query: query };
       const res = await Https.post("file/write", body);
       if (res.status === 1) {
         setIsReload(true);
@@ -100,7 +99,6 @@ const EditorSqlInsert = () => {
           confirmButtonColor: "#249B83",
           text: "Query inserted successfully",
         });
-        // await saveQuery();
       }
     } else {
       setIsSubmit(false);
@@ -113,10 +111,6 @@ const EditorSqlInsert = () => {
       dispatch({ type: "REMOVE_QUERY", payload: "" });
     }
   };
-
-  //   const saveQuery = async () => {
-  //     console.log("saveQuery");
-  //   };
 
   useEffect(() => {
     getDatabases();

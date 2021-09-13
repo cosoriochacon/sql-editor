@@ -32,6 +32,8 @@ const EditorSqlCreate = () => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [querys, dispatch] = useReducer(queryReducer, initialState);
   const [isreload, setIsReload] = useState(false);
+  const [isCheck, setIsCheck] = useState(true);
+  const [defaultValue, setDefaultValue] = useState(null);
 
   const getDatabases = async () => {
     const res = await Https.get("database");
@@ -39,8 +41,11 @@ const EditorSqlCreate = () => {
   };
 
   const handleCheck = async (values) => {
+    setIsCheck(false);
+    let def = "create table" + " " + values.nombreDB + ".";
     setSelectedDB(values.nombreDB);
     setIdDB(values.iddatabase);
+    setDefaultValue(def);
     setIsDisabled(!isDisabled);
   };
 
@@ -60,26 +65,26 @@ const EditorSqlCreate = () => {
   };
 
   const handleSaveFile = async () => {
-    setIsReload(true);
+    // setIsReload(true);
     const regex = /create table/i;
     let query = querys.querys[0];
     let query2 = query.split("(");
     let query3 = query2[1].split(")");
-    let columns = query3[0];
-    let arr_columns = columns.split(",");
     let query4 = query3[0].split(",");
     let fields = query4.toString();
     let t1 = query.replace(regex, "");
     let t2 = t1.split("(");
     let table = t2[0].trim();
+    let nameTable = table.split(".")[1].trim();
+    console.log(nameTable);
     let body2 = {
       iddb: idDB,
       query: query,
       cant: query4.length,
       fields: fields,
-      table: table,
+      table: nameTable,
     };
-    let body = { nameTable: table, columns: arr_columns };
+    let body = { query: query };
     const res = await Https.post("file/create", body);
     if (res.status === 1) {
       dispatch({ type: "REMOVE_QUERY", payload: "" });
@@ -181,7 +186,8 @@ const EditorSqlCreate = () => {
                           placeholder="Query"
                           onChange={handleChange}
                           onBlur={handleBlur}
-                          defaultValue={"create table"}
+                          defaultValue={defaultValue}
+                          disabled={isCheck}
                         ></textarea>
                         <div className="text-danger">
                           {errors.query && touched.query && errors.query}
@@ -246,7 +252,7 @@ const editorSchema = yup.object().shape({
     .string()
     .required("Required")
     .matches(
-      /^create table \w+ [(][[\w\W].*[)];$/,
+      /^create table \w+[.]\w+ [(][[\w\W].*[)];$/,
       "Not match: create table table_name (params);"
     ),
 });
