@@ -71,16 +71,18 @@ const EditorSqlInsert = () => {
   };
 
   const handleSaveFile = async () => {
+    const regex = /insert into \w+[.]\w+ [(]/i;
+    const regex2 = /[)] values [(][[\w\W].*[)];/i;
+    const regex3 = /insert into \w+[.]\w+ [(][[\w\W].*[)] values [(]/i;
+    const regex4 = /[)];/i;
     let query = querys.querys[0];
-    let arr_query = query.split(" ");
-    let cols = arr_query[3];
-    let c1 = cols.replace("(", "");
-    let c2 = c1.replace(")", "");
-    let arr_cols = c2.split(",");
-    let vals = arr_query[5];
-    let v1 = vals.replace("(", "");
-    let v2 = v1.replace(");", "");
+    let c1 = query.replace(regex, "");
+    let c2 = c1.replace(regex2, "");
+    let v1 = query.replace(regex3, "");
+    let v2 = v1.replace(regex4, "");
     let arr_vals = v2.split(",");
+    let arr_cols = c2.split(",");
+
     if (arr_cols.length === arr_vals.length) {
       let body = { query: query };
       const res = await Https.post("file/write", body);

@@ -65,30 +65,32 @@ const EditorSqlCreate = () => {
   };
 
   const handleSaveFile = async () => {
-    // setIsReload(true);
-    const regex = /create table/i;
+    setIsReload(true);
+    const regex = /create table \w+[.]\w+ [(]/i;
+    const regex2 = /[)];/i;
+    const regex3 = /create table \w+[.]/i;
     let query = querys.querys[0];
-    let query2 = query.split("(");
-    let query3 = query2[1].split(")");
-    let query4 = query3[0].split(",");
-    let fields = query4.toString();
-    let t1 = query.replace(regex, "");
-    let t2 = t1.split("(");
-    let table = t2[0].trim();
-    let nameTable = table.split(".")[1].trim();
-    console.log(nameTable);
+    let q1 = query.replace(regex, "");
+    let q2 = q1.trim().replace(regex2, "");
+    let q3 = q2.split(",");
+    let fields = q3.toString();
+    let t1 = query.replace(regex3, "");
+    let nameTable = t1.split(" ")[0].trim();
+
     let body2 = {
       iddb: idDB,
       query: query,
-      cant: query4.length,
+      cant: q3.length,
       fields: fields,
       table: nameTable,
     };
+
     let body = { query: query };
     const res = await Https.post("file/create", body);
     if (res.status === 1) {
       dispatch({ type: "REMOVE_QUERY", payload: "" });
       setSelectedDB(null);
+      setDefaultValue(null);
       setIsDisabled(false);
       await saveQuery(body2);
     }
