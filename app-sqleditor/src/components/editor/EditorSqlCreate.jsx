@@ -100,12 +100,16 @@ const EditorSqlCreate = () => {
     const res = await Https.post("query", body);
     if (res.status === 1) {
       setIsReload(false);
-      swal.fire({
-        icon: "success",
-        title: "Successfully",
-        confirmButtonColor: "#249B83",
-        text: res.msg,
-      });
+      swal
+        .fire({
+          icon: "success",
+          title: "Successfully",
+          confirmButtonColor: "#249B83",
+          text: res.msg,
+        })
+        .then((result) => {
+          window.location.reload();
+        });
     } else if (res.status === 0) {
       setIsReload(false);
       swal.fire({
