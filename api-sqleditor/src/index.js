@@ -7,6 +7,7 @@ require("./app/routes/query")(app);
 require("./app/routes/create")(app);
 require("./app/routes/insert")(app);
 require("./app/routes/update")(app);
+require("./app/routes/delete")(app);
 
 app.listen(app.get("port"), () => {
   console.log(`Server running port ${app.get("port")}`);
