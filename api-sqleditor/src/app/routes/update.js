@@ -45,7 +45,6 @@ module.exports = (app) => {
           obj.data[pos_data] = dataTemp;
 
           let json = JSON.stringify(obj);
-
           fs.writeFileSync(path, json, "utf-8");
           res.json({
             status: 1,
