@@ -1,5 +1,5 @@
 const fs = require("fs");
-const FileModel = require("../models/file");
+const ParserModel = require("../models/parserModel");
 
 module.exports = (app) => {
   /**
@@ -7,7 +7,7 @@ module.exports = (app) => {
    */
   app.post("/api/query/create", async (req, res) => {
     const { query } = req.body;
-    const statements = await FileModel.queryParser(query);
+    const statements = await ParserModel.queryParser(query);
     let columns = [];
     let into = statements.name.name;
     let nameTable = into.split(".")[1].trim();

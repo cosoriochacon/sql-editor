@@ -1,10 +1,10 @@
 const fs = require("fs");
-const FileModel = require("../models/file");
+const ParserModel = require("../models/parserModel");
 
 module.exports = (app) => {
   app.post("/api/query/delete", async (req, res) => {
     let { query } = req.body;
-    const statements = await FileModel.queryParser(query);
+    const statements = await ParserModel.queryParser(query);
     let from = statements.from.name;
     let nameTable = from.split(".")[1].trim();
     let nameDB = from.split(".")[0].trim();

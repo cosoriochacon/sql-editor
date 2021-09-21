@@ -1,5 +1,5 @@
 const fs = require("fs");
-const FileModel = require("../models/file");
+const ParserModel = require("../models/parserModel");
 
 module.exports = (app) => {
   /**
@@ -7,7 +7,7 @@ module.exports = (app) => {
    */
   app.post("/api/query/insert", async (req, res) => {
     let { query } = req.body;
-    const statements = await FileModel.queryParser(query);
+    const statements = await ParserModel.queryParser(query);
     let arr_data = [];
     let into = statements.into.name;
     let nameTable = into.split(".")[1].trim();
@@ -19,7 +19,7 @@ module.exports = (app) => {
     let nameFile = nameTable + ".json";
     let path = "files/" + nameFile;
     let file = fs.existsSync(path);
-    
+
     if (file) {
       fs.readFile(path, (err, data) => {
         if (err) {
