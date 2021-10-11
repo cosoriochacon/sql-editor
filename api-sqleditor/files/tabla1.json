@@ -1,8 +1,0 @@
-{
-  "header": { "tb_name": "tabla1", "db_name": "b" },
-  "columns": ["col1", "col2", "col3"],
-  "data": [
-    ["h1", "chris", "david"],
-    ["test", "test2", "test3"]
-  ]
-}

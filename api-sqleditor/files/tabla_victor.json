@@ -1,0 +1,9 @@
+{
+  "header": { "tb_name": "tabla_victor", "db_name": "va", "columns": 2 },
+  "columns": ["col1", "col2"],
+  "data": [
+    ["hola", "hola2"],
+    ["prueba", "prueba20"],
+    ["prueba32", ""]
+  ]
+}

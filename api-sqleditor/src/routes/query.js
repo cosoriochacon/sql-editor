@@ -1,4 +1,4 @@
-const conn = require("../../config/database");
+const conn = require("../config/database");
 
 module.exports = (app) => {
   app.get("/api/query/:id", (req, res) => {

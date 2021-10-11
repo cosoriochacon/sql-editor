@@ -1,14 +1,15 @@
 const app = require("./config/server");
 
 // Rutas
-require("./app/routes/usuario")(app);
-require("./app/routes/dbs")(app);
-require("./app/routes/query")(app);
-require("./app/routes/create")(app);
-require("./app/routes/insert")(app);
-require("./app/routes/update")(app);
-require("./app/routes/delete")(app);
-require("./app/routes/parser")(app);
+require("./routes/user")(app);
+require("./routes/dbs")(app);
+require("./routes/query")(app);
+require("./routes/create")(app);
+require("./routes/insert")(app);
+require("./routes/update")(app);
+require("./routes/delete")(app);
+require("./routes/parser")(app);
+require("./routes/schemas")(app);
 
 app.listen(app.get("port"), () => {
   console.log(`Server running port ${app.get("port")}`);

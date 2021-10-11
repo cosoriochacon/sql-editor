@@ -1,25 +1,25 @@
 import React from "react";
 import StepWizard from "react-step-wizard";
 
-import EditorWizardNav from "./EditorWizardNav";
-import EditorSqlCreate from "./EditorSqlCreate";
-import EditorSqlInsert from "./EditorSqlInsert";
+import EditorRemoteCreate from "./EditorRemoteCreate";
+import EditorRemoteInsert from "./EditorRemoteInsert";
+import EditorWizardNav from "../editor/EditorWizardNav";
 
-const EditorWizard = () => {
+const EditorRemoteWizard = () => {
   return (
     <div className="container" style={{ marginTop: "2%" }}>
       <div className="row">
         <div className="col-md-12">
           <div className="alert alert-success" role="alert">
-            <h3>Local</h3>
+            <h3>Remote</h3>
           </div>
           <StepWizard
             nav={<EditorWizardNav />}
             initialStep={1}
             isHashEnabled={true}
           >
-            <EditorSqlCreate hashkey={"first"}></EditorSqlCreate>
-            <EditorSqlInsert hashkey={"second"}></EditorSqlInsert>
+            <EditorRemoteCreate hashkey={"first"}></EditorRemoteCreate>
+            <EditorRemoteInsert hashkey={"second"}></EditorRemoteInsert>
           </StepWizard>
         </div>
       </div>
@@ -27,4 +27,4 @@ const EditorWizard = () => {
   );
 };
 
-export default EditorWizard;
+export default EditorRemoteWizard;

@@ -25,3 +25,12 @@
   color: #F4D03F ;
   font-weight: bold;
 }
+
+.Navbar__font-white {
+  color: white ;
+  font-weight: bold;
+}
+
+.Navbar__font_li {
+  color: white ;
+}

@@ -38,6 +38,31 @@ class Http {
       throw Error(err);
     }
   };
+
+  postRemote = async (url, form) => {
+    try {
+      let req = await fetch(url, {
+        method: "POST",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify(form),
+        redirect: "follow",
+        referrer: "no-referrer",
+      });
+
+      let json = await req.json();
+
+      return json;
+    } catch (err) {
+      console.log("http post method err", err);
+
+      throw Error(err);
+    }
+  };
 }
 
 export default new Http();

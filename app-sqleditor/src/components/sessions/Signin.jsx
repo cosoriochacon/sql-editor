@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import swal from "sweetalert2";
@@ -7,13 +7,11 @@ import authService from "../../services/authService";
 import "../styles/Signin.css";
 import supermanImage from "../../images/superman.png";
 
-import Loading from "../views/Loading";
-
 const Signin = (props) => {
   const handleSubmit = async (values) => {
     const res = await authService.login(values.username, values.password);
     if (res.status === 1) {
-      localStorage.setItem("auth_user", JSON.stringify(res.data));
+      localStorage.setItem("auth_user", JSON.stringify(res.user));
       props.history.push("/");
       swal
         .fire({

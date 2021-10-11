@@ -259,7 +259,7 @@ const editorSchema = yup.object().shape({
     .required("Required")
     .matches(
       /^create table \w+[.]\w+ [(][[\w\W].*[)];$/,
-      "Not match: create table table_name (params);"
+      "Not match: create table server.table_name (params);"
     ),
 });
 

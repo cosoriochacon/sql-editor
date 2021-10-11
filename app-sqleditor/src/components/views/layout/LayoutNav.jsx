@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Navbar.css";
 import logo from "../../../images/superman.png";
@@ -12,21 +12,28 @@ const LayoutNav = () => {
   };
 
   return (
-    <div className="Navbar">
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-1">
-            <Link
-              className="Navbar__brand"
-              to="/"
-              style={{ textDecoration: "none" }}
-            >
-              <img className="Navbar__brand-logo" src={logo} alt="Logo" />
-              <span className="font-weight-light">SQL</span>
-              <span className="Navbar__font-yellow">Editor</span>
-            </Link>
+    <div>
+      <nav className="navbar navbar-expand-lg Navbar">
+        <div className="container-fluid">
+          <Link className="navbar-brand" to="/">
+            <img className="Navbar__brand-logo" src={logo} alt="Logo" />
+            <span className="Navbar__font-white">SQL</span>
+            <span className="Navbar__font-yellow">Editor</span>
+          </Link>
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav">
+              <li className="nav-item">
+                <Link className="nav-link active" to="/editor">
+                  <span className="Navbar__font_li">Local</span>
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to="/remote">
+                  <span className="Navbar__font_li">Remote</span>
+                </Link>
+              </li>
+            </ul>
           </div>
-          <div className="col-10"></div>
           <div className="col-1">
             {user && (
               <>
@@ -43,7 +50,7 @@ const LayoutNav = () => {
             )}
           </div>
         </div>
-      </div>
+      </nav>
     </div>
   );
 };
