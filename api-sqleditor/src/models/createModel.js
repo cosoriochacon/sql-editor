@@ -16,14 +16,6 @@ const createQuery = async (statements) => {
   }
   let name = nameTable + ".json";
   let path = "files/" + name;
-  const fileCurrent = await checkFileExists(path);
-  if (!fileCurrent) {
-    let response = {
-      status: 1,
-      message: `Table ${nameTable} already exists on the server`,
-    };
-    return response;
-  }
   let newIItem = {
     header: {
       tb_name: nameTable,
@@ -43,6 +35,12 @@ const createQuery = async (statements) => {
         table: newIItem,
       };
       return response;
+    } else if (file_res === 404) {
+      let response = {
+        status: 1,
+        message: `Table ${nameTable} already exists on the server`,
+      };
+      return response;
     }
   } catch (error) {
     let response = {
@@ -60,30 +58,23 @@ const createQuery = async (statements) => {
  * @returns 200 | 400
  */
 const appendDataToFile = async (path, data) => {
-  await fs.promises.appendFile(path, data);
-  const newBuffer = await fs.promises.readFile(path);
-  const newContent = newBuffer.toString();
-  let response;
-  if (newContent.length > 0) {
-    response = 200;
+  let file = fs.existsSync(path);
+  if (!file) {
+    await fs.promises.appendFile(path, data);
+    const newBuffer = await fs.promises.readFile(path);
+    const newContent = newBuffer.toString();
+    let response;
+    if (newContent.length > 0) {
+      response = 200;
+    } else {
+      response = 400;
+    }
+
+    return response;
   } else {
-    response = 400;
+    return 404;
   }
-
-  return response;
 };
-
-/**
- * Función para validar si existe el archivo .json
- * @param {pathname} file
- * @returns Boolena
- */
-async function checkFileExists(file) {
-  return fs.promises
-    .access(file, fs.constants.F_OK)
-    .then(() => true)
-    .catch(() => false);
-}
 
 module.exports = {
   createQuery,

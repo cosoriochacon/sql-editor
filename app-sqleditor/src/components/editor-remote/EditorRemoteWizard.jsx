@@ -4,7 +4,7 @@ import StepWizard from "react-step-wizard";
 import EditorRemoteCreate from "./EditorRemoteCreate";
 import EditorRemoteInsert from "./EditorRemoteInsert";
 import EditorRemoteDelete from "./EditorRemoteDelete";
-import EditorWizardNav from "../editor/EditorWizardNav";
+import EditorWizardNav from "../pages/EditorWizardNav";
 
 const EditorRemoteWizard = () => {
   return (

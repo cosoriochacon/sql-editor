@@ -1,7 +1,7 @@
 import React from "react";
 import StepWizard from "react-step-wizard";
 
-import EditorWizardNav from "./EditorWizardNav";
+import EditorWizardNav from "../pages/EditorWizardNav";
 import EditorSqlCreate from "./EditorSqlCreate";
 import EditorSqlInsert from "./EditorSqlInsert";
 

@@ -32,6 +32,7 @@ const EditorRemoteCreate = () => {
   const [isDisabled, setIsDisabled] = useState(false);
   const [defaultValue, setDefaultValue] = useState(null);
   const [schema, setSchema] = useState(null);
+  const [isSubmit, setSubmit] = useState(false);
   const [querys, dispatch] = useReducer(queryReducer, initialState);
 
   const getServers = async () => {
@@ -47,9 +48,9 @@ const EditorRemoteCreate = () => {
     setIsDisabled(!isDisabled);
   };
 
-  const handleSubmit = (query, { setSubmitting }) => {
+  const handleSubmit = (query) => {
     dispatch({ type: "ADD_QUERY", payload: query.query });
-    setSubmitting(true);
+    setSubmit(true);
   };
 
   const handleSaveFile = async () => {
@@ -72,7 +73,11 @@ const EditorRemoteCreate = () => {
           text: res.message,
           confirmButtonColor: "#249B83",
         })
-        .then(() => window.location.reload());
+        .then(() => {
+          setIsDisabled(!isDisabled);
+          dispatch({ type: "REMOVE_QUERY", payload: "" });
+          setSubmit(false);
+        });
     } else if (res.status === 0) {
       swal
         .fire({
@@ -164,7 +169,7 @@ const EditorRemoteCreate = () => {
                       <button
                         type="submit"
                         className="btn btn-success"
-                        disabled={isSubmitting}
+                        disabled={isSubmit}
                       >
                         Add
                       </button>
