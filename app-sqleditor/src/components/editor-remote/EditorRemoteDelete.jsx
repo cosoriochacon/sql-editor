@@ -42,7 +42,7 @@ const EditorRemoteDelete = () => {
 
   const handleCheck = async (values) => {
     setIsCheck(false);
-    let def = "delete from" + " " + values.key + ".";
+    let def = `delete from ${values.key}.`;
     setSchema(values.key);
     setDefaultValue(def);
     setIsDisabled(!isDisabled);
@@ -56,7 +56,6 @@ const EditorRemoteDelete = () => {
   const handleSaveFile = async () => {
     let query = querys.querys[0];
     let body = { query: query };
-    console.log(body);
     let url;
     if (schema === "VA") {
       url = process.env.REACT_APP_URL_SERVER_VICTOR;
@@ -65,30 +64,30 @@ const EditorRemoteDelete = () => {
     } else if (schema === "MP") {
       url = process.env.REACT_APP_URL_SERVER_MIGUEL;
     }
-    // const res = await Https.postRemote(url + "/parseQuery", body);
-    // if (res.status === 1) {
-    //   swal
-    //     .fire({
-    //       icon: "warning",
-    //       title: "Oops!",
-    //       text: res.message,
-    //       confirmButtonColor: "#249B83",
-    //     })
-    //     .then(() => {
-    //       setIsDisabled(!isDisabled);
-    //       dispatch({ type: "REMOVE_QUERY", payload: "" });
-    //       setSubmit(false);
-    //     });
-    // } else if (res.status === 0) {
-    //   swal
-    //     .fire({
-    //       icon: "success",
-    //       title: "Successfully",
-    //       confirmButtonColor: "#249B83",
-    //       text: res.message,
-    //     })
-    //     .then(() => window.location.reload());
-    // }
+    const res = await Https.postRemote(url + "/parseQuery", body);
+    if (res.status === 1) {
+      swal
+        .fire({
+          icon: "warning",
+          title: "Oops!",
+          text: res.message,
+          confirmButtonColor: "#249B83",
+        })
+        .then(() => {
+          setIsDisabled(!isDisabled);
+          dispatch({ type: "REMOVE_QUERY", payload: "" });
+          setSubmit(false);
+        });
+    } else if (res.status === 0) {
+      swal
+        .fire({
+          icon: "success",
+          title: "Successfully",
+          confirmButtonColor: "#249B83",
+          text: res.message,
+        })
+        .then(() => window.location.reload());
+    }
   };
 
   useEffect(() => {

@@ -67,6 +67,7 @@ const appendDataToFile = async (path, statements) => {
         pos_data = i;
       }
     }
+
     if (pos_data === undefined) return 404;
     let arrayTemp = [];
     for (let i = 0; i < obj.data.length; i++) {
