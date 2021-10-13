@@ -37,20 +37,20 @@ module.exports = (app) => {
           } else {
             res.json({
               status: 0,
-              msg: `Table ${nameTable} created on local server`,
+              message: `Table ${nameTable} created on local server`,
             });
           }
         });
       } else {
         res.json({
           status: 1,
-          msg: `Table ${nameTable} already exists on the server`,
+          message: `Table ${nameTable} already exists on the server`,
         });
       }
     } catch (error) {
       res.json({
         status: 1,
-        msg: "Syntax Error",
+        message: "Syntax Error",
       });
     }
   });

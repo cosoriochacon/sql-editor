@@ -40,9 +40,29 @@ const EditorSqlCreate = () => {
     let query = querys.querys[0];
 
     let body = { query: query };
-    const res = await Https.post("file/create", body);
+    const res = await Https.post("query/create", body);
     if (res.status === 1) {
-      dispatch({ type: "REMOVE_QUERY", payload: "" });
+      swal
+        .fire({
+          icon: "warning",
+          title: "Oops!",
+          text: res.message,
+          confirmButtonColor: "#249B83",
+        })
+        .then(() => {
+          setIsDisabled(!isDisabled);
+          dispatch({ type: "REMOVE_QUERY", payload: "" });
+          setSubmit(false);
+        });
+    } else if (res.status === 0) {
+      swal
+        .fire({
+          icon: "success",
+          title: "Successfully",
+          confirmButtonColor: "#249B83",
+          text: res.message,
+        })
+        .then(() => window.location.reload());
     }
   };
 
@@ -73,7 +93,7 @@ const EditorSqlCreate = () => {
                       name="query"
                       id="query"
                       rows="5"
-                      placeholder="Query"
+                      placeholder="create table table_name (params);"
                       onChange={handleChange}
                       onBlur={handleBlur}
                       disabled={isDisabled}
@@ -137,8 +157,8 @@ const editorSchema = yup.object().shape({
     .string()
     .required("Required")
     .matches(
-      /^create table \w+[.]\w+ [(][[\w\W].*[)];$/,
-      "Not match: create table server.table_name (params);"
+      /^create table \w+ [(][[\w\W].*[)];$/,
+      "Not match: create table table_name (params);"
     ),
 });
 

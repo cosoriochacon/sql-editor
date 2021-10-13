@@ -52,20 +52,20 @@ class DeleteController {
             fs.writeFileSync(path, json, "utf-8");
             return res.json({
               status: 1,
-              msg: `Delete table ${nameTable} on local server successfull`,
+              message: `Delete table ${nameTable} on local server successfull`,
             });
           }
         });
       } else {
         return res.json({
           status: 1,
-          msg: `Table ${nameTable} does not exists on the server`,
+          message: `Table ${nameTable} does not exists on the server`,
         });
       }
     } catch (error) {
       res.json({
         status: 1,
-        msg: "Syntax Error",
+        message: "Syntax Error",
       });
     }
   }

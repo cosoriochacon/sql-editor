@@ -3,6 +3,7 @@
   "columns": ["col1", "col2"],
   "data": [
     ["hola", "ho"],
-    ["hola", "test"]
+    ["hola", "test"],
+    ["front", "front2"]
   ]
 }

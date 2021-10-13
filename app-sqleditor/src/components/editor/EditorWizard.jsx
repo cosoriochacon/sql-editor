@@ -3,6 +3,7 @@ import StepWizard from "react-step-wizard";
 
 import EditorWizardNav from "../pages/EditorWizardNav";
 import EditorSqlCreate from "./EditorSqlCreate";
+import EditorSqlDelete from "./EditorSqlDelete";
 import EditorSqlInsert from "./EditorSqlInsert";
 
 const EditorWizard = () => {
@@ -20,6 +21,7 @@ const EditorWizard = () => {
           >
             <EditorSqlCreate hashkey={"first"}></EditorSqlCreate>
             <EditorSqlInsert hashkey={"second"}></EditorSqlInsert>
+            <EditorSqlDelete hashkey={"third"}></EditorSqlDelete>
           </StepWizard>
         </div>
       </div>
