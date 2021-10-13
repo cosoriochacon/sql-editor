@@ -41,7 +41,7 @@ const EditorRemoteCreate = () => {
 
   const handleCheck = async (values) => {
     setIsCheck(false);
-    let def = "create table" + " " + values.key + ".";
+    let def = `create table ${values.key}.`;
     setSchema(values.key);
     setDefaultValue(def);
     setIsDisabled(!isDisabled);

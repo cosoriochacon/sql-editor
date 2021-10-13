@@ -42,7 +42,7 @@ const EditorRemoteInsert = () => {
 
   const handleCheck = async (values) => {
     setIsCheck(false);
-    let def = "insert into" + " " + values.key + ".";
+    let def = `insert into ${values.key}.`;
     setSchema(values.key);
     setDefaultValue(def);
     setIsDisabled(!isDisabled);
