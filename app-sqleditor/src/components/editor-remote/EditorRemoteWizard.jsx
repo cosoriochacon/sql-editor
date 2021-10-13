@@ -3,6 +3,7 @@ import StepWizard from "react-step-wizard";
 
 import EditorRemoteCreate from "./EditorRemoteCreate";
 import EditorRemoteInsert from "./EditorRemoteInsert";
+import EditorRemoteDelete from "./EditorRemoteDelete";
 import EditorWizardNav from "../editor/EditorWizardNav";
 
 const EditorRemoteWizard = () => {
@@ -20,6 +21,7 @@ const EditorRemoteWizard = () => {
           >
             <EditorRemoteCreate hashkey={"first"}></EditorRemoteCreate>
             <EditorRemoteInsert hashkey={"second"}></EditorRemoteInsert>
+            <EditorRemoteDelete hashkey={"third"}></EditorRemoteDelete>
           </StepWizard>
         </div>
       </div>

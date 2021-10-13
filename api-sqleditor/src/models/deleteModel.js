@@ -7,6 +7,8 @@ const fs = require("fs");
  */
 const deleteQuery = async (statements) => {
   let from = statements.from.name;
+  let column = statements.where[0].left.name;
+  let value = statements.where[0].right.name;
   let nameTable = from.split(".")[1].trim();
   let nameDB = from.split(".")[0].trim();
   let nameFile = nameTable + ".json";
@@ -15,7 +17,26 @@ const deleteQuery = async (statements) => {
     const file_res = await appendDataToFile(path, statements);
     if (file_res === 200) {
       let response = {
+        status: 0,
         message: `Delete table ${nameTable} on server ${nameDB} successfull`,
+      };
+      return response;
+    } else if (file_res === 404) {
+      let response = {
+        status: 1,
+        message: `The value ${value} is not in the table ${nameTable}`,
+      };
+      return response;
+    } else if (file_res === 400) {
+      let response = {
+        status: 1,
+        message: `Table ${nameTable} does not exists on the server`,
+      };
+      return response;
+    } else if (file_res === 403) {
+      let response = {
+        status: 1,
+        message: `Column ${column} does not exist in table ${nameTable}`,
       };
       return response;
     }
@@ -37,24 +58,30 @@ const appendDataToFile = async (path, statements) => {
     const oldContent = oldBuffer.toString();
     obj = JSON.parse(oldContent);
     let pos_where = obj.columns.indexOf(statements.where[0].left.name);
+    if (pos_where === -1) return 403;
+    let value = statements.where[0].right.name;
     let pos_data;
+
     for (let i = 0; i < obj.data.length; i++) {
       if (obj.data[i][pos_where] === statements.where[0].right.name) {
         pos_data = i;
       }
     }
-    let dataTemp = obj.data[pos_data];
-
-    for (let i = 0; i < dataTemp.length; i++) {
-      if (dataTemp[i] === statements.where[0].right.name) {
-        obj.data.splice(pos_data, 1);
-      }
+    if (pos_data === undefined) return 404;
+    let arrayTemp = [];
+    for (let i = 0; i < obj.data.length; i++) {
+      const element = obj.data[i][pos_where];
+      if (element !== value) arrayTemp.push(obj.data[i]);
     }
+
+    obj.data = arrayTemp;
 
     let json = JSON.stringify(obj);
     await fs.writeFileSync(path, json, "utf-8");
 
     return 200;
+  } else {
+    return 400;
   }
 };
 
