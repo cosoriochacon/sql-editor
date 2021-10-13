@@ -36,10 +36,11 @@ const insertQuery = async (statements) => {
     return response;
   }
 
-  if (columns.length > numberColumns) {
+  if (columns.length != numberColumns) {
     let response = {
       status: 1,
-      message: "Column length does not match the entered values",
+      message:
+        "The length of the columns does not match the columns in the table",
     };
     return response;
   }
