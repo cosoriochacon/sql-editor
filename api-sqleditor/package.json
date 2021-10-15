@@ -1,25 +1,20 @@
 {
   "name": "api-sqleditor",
   "version": "1.0.0",
-  "description": "",
+  "description": "API Parser SQL - Proyect CC6",
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Christian Osorio",
   "license": "ISC",
   "dependencies": {
-    "async-fs-wrapper": "^2.6.2",
-    "await-fs": "^1.0.0",
     "cors": "^2.8.5",
-    "crypto-js": "^4.1.1",
-    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "fs": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
-    "mysql": "^2.18.1",
     "nodemon": "^2.0.12",
     "sqlite-parser": "^1.0.1"
   }

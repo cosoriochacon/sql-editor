@@ -41,7 +41,11 @@ const deleteQuery = async (statements) => {
       return response;
     }
   } catch (error) {
-    return error;
+    let response = {
+      status: 1,
+      message: "Syntax Error",
+    };
+    return response;
   }
 };
 

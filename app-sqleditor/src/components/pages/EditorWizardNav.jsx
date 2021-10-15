@@ -26,6 +26,7 @@ const EditorWizardNav = (props) => {
           {i === 2 && <>INSERT</>}
           {i === 3 && <>DELETE</>}
           {i === 4 && <>UPDATE</>}
+          {i === 5 && <>SELECT</>}
         </h5>
       </div>
     );

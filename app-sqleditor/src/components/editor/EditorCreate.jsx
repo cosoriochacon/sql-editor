@@ -26,7 +26,7 @@ const queryReducer = (state, action) => {
   }
 };
 
-const EditorRemoteDelete = () => {
+const EditorCreate = () => {
   const [servers, setServers] = useState([]);
   const [isCheck, setIsCheck] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -42,7 +42,7 @@ const EditorRemoteDelete = () => {
 
   const handleCheck = async (values) => {
     setIsCheck(false);
-    let def = `delete from ${values.key}.`;
+    let def = `create table ${values.key}.`;
     setSchema(values.key);
     setDefaultValue(def);
     setIsDisabled(!isDisabled);
@@ -63,6 +63,8 @@ const EditorRemoteDelete = () => {
       url = process.env.REACT_APP_URL_SERVER_WALTER;
     } else if (schema === "MP") {
       url = process.env.REACT_APP_URL_SERVER_MIGUEL;
+    } else if (schema === "CO") {
+      url = process.env.REACT_APP_URL_SERVER_LOCAL;
     }
     const res = await Https.postRemote(url + "/parseQuery", body);
     if (res.status === 1) {
@@ -116,7 +118,7 @@ const EditorRemoteDelete = () => {
                                 onClick={() => handleCheck(item)}
                                 disabled={isDisabled}
                               />
-                              <p className="text-muted">{item.key}</p>
+                              <p className="text-muted">{item.value}</p>
                             </div>
                           </div>
                         </div>
@@ -220,9 +222,9 @@ const editorSchema = yup.object().shape({
     .string()
     .required("Required")
     .matches(
-      /^delete from \w+[.]\w+ where \w+ = \w+;$/,
-      "Not match: delete from server.table_name where column = value;"
+      /^create table \w+[.]\w+ [(][[\w\W].*[)];$/,
+      "Not match: create table server.table_name (params);"
     ),
 });
 
-export default EditorRemoteDelete;
+export default EditorCreate;

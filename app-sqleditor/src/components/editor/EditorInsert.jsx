@@ -26,7 +26,7 @@ const queryReducer = (state, action) => {
   }
 };
 
-const EditorRemoteInsert = () => {
+const EditorInsert = () => {
   const [servers, setServers] = useState([]);
   const [isCheck, setIsCheck] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -63,6 +63,8 @@ const EditorRemoteInsert = () => {
       url = process.env.REACT_APP_URL_SERVER_WALTER;
     } else if (schema === "MP") {
       url = process.env.REACT_APP_URL_SERVER_MIGUEL;
+    } else if (schema === "CO") {
+      url = process.env.REACT_APP_URL_SERVER_LOCAL;
     }
     const res = await Https.postRemote(url + "/parseQuery", body);
     if (res.status === 1) {
@@ -116,7 +118,7 @@ const EditorRemoteInsert = () => {
                                 onClick={() => handleCheck(item)}
                                 disabled={isDisabled}
                               />
-                              <p className="text-muted">{item.key}</p>
+                              <p className="text-muted">{item.value}</p>
                             </div>
                           </div>
                         </div>
@@ -225,4 +227,4 @@ const editorSchema = yup.object().shape({
     ),
 });
 
-export default EditorRemoteInsert;
+export default EditorInsert;

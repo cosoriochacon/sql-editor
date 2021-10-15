@@ -23,13 +23,8 @@ const LayoutNav = () => {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="nav-link active" to="/editor">
-                  <span className="Navbar__font_li">Local</span>
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" to="/remote">
-                  <span className="Navbar__font_li">Remote</span>
+                <Link className="nav-link" to="/editor">
+                  <span className="Navbar__font_li">Editor</span>
                 </Link>
               </li>
             </ul>

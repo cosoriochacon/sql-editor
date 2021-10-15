@@ -1,0 +1,8 @@
+{
+  "header": { "tb_name": "tabla_christian", "db_name": "co", "columns": 3 },
+  "columns": ["col1", "col2", "col3"],
+  "data": [
+    ["frontend", "prueba1", "prueba2"],
+    ["test", "test1", "test2"]
+  ]
+}

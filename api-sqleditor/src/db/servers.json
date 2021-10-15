@@ -1,14 +1,18 @@
 [
   {
+    "key": "CO",
+    "value": "Servicor Local"
+  },
+  {
     "key": "VA",
-    "value": "Victor Amado"
+    "value": "Servidor Victor"
   },
   {
     "key": "WS",
-    "value": "Walter Solís"
+    "value": "Servidor Walter"
   },
   {
     "key": "MP",
-    "value": "Miguel Porras"
+    "value": "Servidor Miguel"
   }
 ]

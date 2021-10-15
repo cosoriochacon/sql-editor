@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
+
 import Https from "../../libs/Https";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -25,22 +26,47 @@ const queryReducer = (state, action) => {
   }
 };
 
-const EditorSqlCreate = () => {
+const EditorUpdate = () => {
+  const [servers, setServers] = useState([]);
+  const [isCheck, setIsCheck] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [querys, dispatch] = useReducer(queryReducer, initialState);
+  const [defaultValue, setDefaultValue] = useState(null);
+  const [schema, setSchema] = useState(null);
   const [isSubmit, setSubmit] = useState(false);
+  const [querys, dispatch] = useReducer(queryReducer, initialState);
+
+  const getServers = async () => {
+    const res = await Https.get("schemas");
+    setServers(res);
+  };
+
+  const handleCheck = async (values) => {
+    setIsCheck(false);
+    let def = `update ${values.key}.`;
+    setSchema(values.key);
+    setDefaultValue(def);
+    setIsDisabled(!isDisabled);
+  };
 
   const handleSubmit = (query) => {
     dispatch({ type: "ADD_QUERY", payload: query.query });
     setSubmit(true);
-    setIsDisabled(!isDisabled);
   };
 
   const handleSaveFile = async () => {
     let query = querys.querys[0];
-
     let body = { query: query };
-    const res = await Https.post("query/create", body);
+    let url;
+    if (schema === "VA") {
+      url = process.env.REACT_APP_URL_SERVER_VICTOR;
+    } else if (schema === "WS") {
+      url = process.env.REACT_APP_URL_SERVER_WALTER;
+    } else if (schema === "MP") {
+      url = process.env.REACT_APP_URL_SERVER_MIGUEL;
+    } else if (schema === "CO") {
+      url = process.env.REACT_APP_URL_SERVER_LOCAL;
+    }
+    const res = await Https.postRemote(url + "/parseQuery", body);
     if (res.status === 1) {
       swal
         .fire({
@@ -66,10 +92,48 @@ const EditorSqlCreate = () => {
     }
   };
 
+  useEffect(() => {
+    getServers();
+  }, []);
+
   return (
     <div className="container" style={{ margin: "10px" }}>
       <div className="row">
-        <div className="col-12">
+        <div className="col-4">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">Servers</h5>
+              {servers.length > 0 ? (
+                <>
+                  {servers.map((item, ind) => (
+                    <div key={ind}>
+                      <div className="list-group list-group-numbered">
+                        <div className="list-group-item d-flex justify-content-between align-items-start">
+                          <div className="ms-2 me-auto">
+                            <div className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="radio"
+                                name="flexRadioDefault"
+                                onClick={() => handleCheck(item)}
+                                disabled={isDisabled}
+                              />
+                              <p className="text-muted">{item.value}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <br />
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <p className="text-muted">Not results</p>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="col-8">
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">Editor</h5>
@@ -93,10 +157,11 @@ const EditorSqlCreate = () => {
                       name="query"
                       id="query"
                       rows="5"
-                      placeholder="create table table_name (params);"
+                      placeholder="Query"
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      disabled={isDisabled}
+                      defaultValue={defaultValue}
+                      disabled={isCheck}
                     ></textarea>
                     <div className="text-danger">
                       {errors.query && touched.query && errors.query}
@@ -157,9 +222,9 @@ const editorSchema = yup.object().shape({
     .string()
     .required("Required")
     .matches(
-      /^create table \w+ [(][[\w\W].*[)];$/,
-      "Not match: create table table_name (params);"
+      /^update \w+[.]\w+ set \w.* where \w+ = \w+;$/,
+      "Not match: update server.table_name set col1 = valor where column = value;"
     ),
 });
 
-export default EditorSqlCreate;
+export default EditorUpdate;

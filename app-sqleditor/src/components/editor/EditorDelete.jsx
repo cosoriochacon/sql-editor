@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useReducer } from "react";
-import { Accordion, Card } from "react-bootstrap";
+
 import Https from "../../libs/Https";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -26,21 +26,47 @@ const queryReducer = (state, action) => {
   }
 };
 
-const EditorSqlInsert = () => {
+const EditorDelete = () => {
+  const [servers, setServers] = useState([]);
+  const [isCheck, setIsCheck] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
+  const [defaultValue, setDefaultValue] = useState(null);
+  const [schema, setSchema] = useState(null);
+  const [isSubmit, setSubmit] = useState(false);
   const [querys, dispatch] = useReducer(queryReducer, initialState);
-  const [isSubmit, setIsSubmit] = useState(false);
+
+  const getServers = async () => {
+    const res = await Https.get("schemas");
+    setServers(res);
+  };
+
+  const handleCheck = async (values) => {
+    setIsCheck(false);
+    let def = `delete from ${values.key}.`;
+    setSchema(values.key);
+    setDefaultValue(def);
+    setIsDisabled(!isDisabled);
+  };
 
   const handleSubmit = (query) => {
     dispatch({ type: "ADD_QUERY", payload: query.query });
-    setIsSubmit(true);
-    setIsDisabled(!isDisabled);
+    setSubmit(true);
   };
 
   const handleSaveFile = async () => {
     let query = querys.querys[0];
     let body = { query: query };
-    const res = await Https.post("query/insert", body);
+    let url;
+    if (schema === "VA") {
+      url = process.env.REACT_APP_URL_SERVER_VICTOR;
+    } else if (schema === "WS") {
+      url = process.env.REACT_APP_URL_SERVER_WALTER;
+    } else if (schema === "MP") {
+      url = process.env.REACT_APP_URL_SERVER_MIGUEL;
+    } else if (schema === "CO") {
+      url = process.env.REACT_APP_URL_SERVER_LOCAL;
+    }
+    const res = await Https.postRemote(url + "/parseQuery", body);
     if (res.status === 1) {
       swal
         .fire({
@@ -52,7 +78,7 @@ const EditorSqlInsert = () => {
         .then(() => {
           setIsDisabled(!isDisabled);
           dispatch({ type: "REMOVE_QUERY", payload: "" });
-          setIsSubmit(false);
+          setSubmit(false);
         });
     } else if (res.status === 0) {
       swal
@@ -66,10 +92,48 @@ const EditorSqlInsert = () => {
     }
   };
 
+  useEffect(() => {
+    getServers();
+  }, []);
+
   return (
     <div className="container" style={{ margin: "10px" }}>
       <div className="row">
-        <div className="col-12">
+        <div className="col-4">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">Servers</h5>
+              {servers.length > 0 ? (
+                <>
+                  {servers.map((item, ind) => (
+                    <div key={ind}>
+                      <div className="list-group list-group-numbered">
+                        <div className="list-group-item d-flex justify-content-between align-items-start">
+                          <div className="ms-2 me-auto">
+                            <div className="form-check">
+                              <input
+                                className="form-check-input"
+                                type="radio"
+                                name="flexRadioDefault"
+                                onClick={() => handleCheck(item)}
+                                disabled={isDisabled}
+                              />
+                              <p className="text-muted">{item.value}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <br />
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <p className="text-muted">Not results</p>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="col-8">
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">Editor</h5>
@@ -93,9 +157,11 @@ const EditorSqlInsert = () => {
                       name="query"
                       id="query"
                       rows="5"
-                      placeholder="insert into table_name (params) values (values)"
+                      placeholder="Query"
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      defaultValue={defaultValue}
+                      disabled={isCheck}
                     ></textarea>
                     <div className="text-danger">
                       {errors.query && touched.query && errors.query}
@@ -156,9 +222,9 @@ const editorSchema = yup.object().shape({
     .string()
     .required("Required")
     .matches(
-      /^insert into \w+ [(][[\w\W].*[)] values [(][[\w\W].*[)];$/,
-      "Not match: insert into table_name (params) values (values);"
+      /^delete from \w+[.]\w+ where \w+ = \w+;$/,
+      "Not match: delete from server.table_name where column = value;"
     ),
 });
 
-export default EditorSqlInsert;
+export default EditorDelete;

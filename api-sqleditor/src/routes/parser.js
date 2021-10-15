@@ -3,7 +3,6 @@ const CreateModel = require("../models/createModel");
 const InsertModel = require("../models/insertModel");
 const UpdateModel = require("../models/updateModel");
 const DeleteModel = require("../models/deleteModel");
-const dotenv = require("dotenv").config();
 
 module.exports = (app) => {
   app.post("/parseQuery", async (req, res) => {

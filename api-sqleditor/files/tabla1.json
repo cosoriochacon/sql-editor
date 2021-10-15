@@ -1,9 +1,9 @@
 {
-  "header": { "tb_name": "tabla1", "columns": 2 },
-  "columns": ["col1", "col2"],
+  "header": { "tb_name": "tabla1", "columns": 3 },
+  "columns": ["col1", "col2", "col3"],
   "data": [
-    ["hola", "ho"],
-    ["hola", "test"],
-    ["front", "front2"]
+    ["hilary", "test", "hola3"],
+    ["edit", "front2", "front3"],
+    ["christian", "front2", "david"]
   ]
 }

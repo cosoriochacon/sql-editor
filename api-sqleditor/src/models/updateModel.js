@@ -6,21 +6,51 @@ const fs = require("fs");
  * @returns Valores editados
  */
 const updateQuery = async (statements) => {
-  let into = statements.into.name;
-  let nameTable = into.split(".")[1].trim();
-  let nameDB = into.split(".")[0].trim();
-  let nameFile = nameTable + ".json";
-  let path = "files/" + nameFile;
   try {
+    let into = statements.into.name;
+    let column = statements.where[0].left.name;
+    let nameTable = into.split(".")[1].trim();
+    let nameDB = into.split(".")[0].trim();
+    let nameFile = nameTable + ".json";
+    let path = "files/" + nameFile;
     const file_res = await appendDataToFile(path, statements);
     if (file_res === 200) {
       let response = {
+        status: 0,
         message: `Update table ${nameTable} on server ${nameDB} successfull`,
+      };
+      return response;
+    } else if (file_res === 400) {
+      let response = {
+        status: 1,
+        message: `Table ${nameTable} does not exists on the server`,
+      };
+      return response;
+    } else if (file_res === 403) {
+      let response = {
+        status: 1,
+        message: `The application only supports equality condition =`,
+      };
+      return response;
+    } else if (file_res === 406) {
+      let response = {
+        status: 1,
+        message: `The application only supports a condition in the where`,
+      };
+      return response;
+    } else if (file_res === 408) {
+      let response = {
+        status: 1,
+        message: `Column ${column} does not exist in table ${nameTable}`,
       };
       return response;
     }
   } catch (error) {
-    return error;
+    let response = {
+      status: 1,
+      message: "Syntax Error",
+    };
+    return response;
   }
 };
 
@@ -37,37 +67,42 @@ const appendDataToFile = async (path, statements) => {
     const oldContent = oldBuffer.toString();
     obj = JSON.parse(oldContent);
     let pos_where = obj.columns.indexOf(statements.where[0].left.name);
-    let pos_data;
-    for (let i = 0; i < obj.data.length; i++) {
-      if (obj.data[i][pos_where] === statements.where[0].right.name) {
-        pos_data = i;
-      }
-    }
 
-    let dataTemp = obj.data[pos_data];
-    let columns_modify = [];
-    let data_modify = [];
-    for (let i = 0; i < statements.set.length; i++) {
-      columns_modify.push(statements.set[i].target.name);
-      data_modify.push(statements.set[i].value.name);
-    }
+    if (pos_where === -1) return 408;
 
-    let cont = 0;
+    if (statements.where[0].operation !== "=") return 403;
+
+    if (statements.where.length !== 1) return 406;
+
+    let index_columns = {};
     for (let i = 0; i < obj.columns.length; i++) {
-      if (i === pos_where) {
-        dataTemp[i] = dataTemp[i];
-      } else {
-        dataTemp[i] = data_modify[cont];
-        cont++;
-      }
+      index_columns[obj.columns[i]] = i;
     }
 
-    obj.data[pos_data] = dataTemp;
+    let data_modify = [];
+    let columns_modify = [];
+    for (let i = 0; i < statements.set.length; i++) {
+      data_modify.push(statements.set[i].value.name);
+      columns_modify.push(statements.set[i].target.name);
+    }
+
+    let value = statements.where[0].right.name;
+    let cont = 0;
+    for (let i = 0; i < obj.data.length; i++) {
+      if (value === obj.data[i][pos_where]) {
+        cont++;
+        for (let j = 0; j < columns_modify.length; j++) {
+          obj.data[i][index_columns[columns_modify[j]]] = data_modify[j];
+        }
+      }
+    }
 
     let json = JSON.stringify(obj);
     await fs.writeFileSync(path, json, "utf-8");
 
     return 200;
+  } else {
+    return 400;
   }
 };
 

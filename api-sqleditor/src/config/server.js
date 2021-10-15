@@ -5,10 +5,14 @@ const cors = require("cors");
 app.use(express.json());
 app.set("port", process.env.PORT || 5050);
 
-//Middlewares
+/**
+ * Middlewares
+ */
 app.use(cors());
 
-// CORS
+/**
+ * CORS
+ */
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header(

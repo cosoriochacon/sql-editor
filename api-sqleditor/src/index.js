@@ -2,8 +2,6 @@ const app = require("./config/server");
 
 // Rutas
 require("./routes/user")(app);
-require("./routes/dbs")(app);
-require("./routes/query")(app);
 require("./routes/create")(app);
 require("./routes/insert")(app);
 require("./routes/update")(app);

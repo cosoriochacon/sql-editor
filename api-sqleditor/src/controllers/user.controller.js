@@ -2,7 +2,6 @@ const path = require("path");
 const DB_PATH = path.join(__dirname + "/../db/user.json");
 let db = require(DB_PATH);
 const jwt = require("jsonwebtoken");
-const fs = require("fs");
 
 class UserController {
   async login(req, res) {
