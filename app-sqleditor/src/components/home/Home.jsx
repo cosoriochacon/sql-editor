@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import "../styles/Home.css";
-import supermanImage from "../../images/superman.png";
+import databaseImage from "../../images/db.png";
 
 const Home = () => {
   return (
@@ -20,7 +20,7 @@ const Home = () => {
           </div>
 
           <div className="Home__col d-none d-md-block col-md-8">
-            <img src={supermanImage} alt="Superman" className="img-fluid p-4" />
+            <img src={databaseImage} alt="Superman" className="img-fluid p-4" />
           </div>
         </div>
       </div>

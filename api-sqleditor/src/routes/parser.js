@@ -3,6 +3,7 @@ const CreateModel = require("../models/createModel");
 const InsertModel = require("../models/insertModel");
 const UpdateModel = require("../models/updateModel");
 const DeleteModel = require("../models/deleteModel");
+const DropModel = require("../models/dropModel");
 
 module.exports = (app) => {
   app.post("/parseQuery", async (req, res) => {
@@ -24,6 +25,15 @@ module.exports = (app) => {
         break;
       case "delete":
         response = await DeleteModel.deleteQuery(statements);
+        response && res.json(response);
+        break;
+      case "select":
+        // response = await DeleteModel.deleteQuery(statements);
+        // response && res.json(response);
+        res.json({ msg: "SELECT" });
+        break;
+      case "drop":
+        response = await DropModel.dropQuery(statements);
         response && res.json(response);
         break;
       default:

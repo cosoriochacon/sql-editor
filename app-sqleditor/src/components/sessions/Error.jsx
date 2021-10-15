@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Error.css";
-import supermanImage from "../../images/superman-blue.png";
+import databaseImage from "../../images/db-not.png";
 
 const Error = () => {
   return (
@@ -19,7 +19,7 @@ const Error = () => {
             </Link>
           </div>
           <div className="Error__col d-none d-md-block col-md-8">
-            <img src={supermanImage} alt="Superman" className="img-fluid p-4" />
+            <img src={databaseImage} alt="Superman" className="img-fluid p-4" />
           </div>
         </div>
       </div>

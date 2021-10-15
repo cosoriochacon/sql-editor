@@ -5,7 +5,7 @@ import swal from "sweetalert2";
 import authService from "../../services/authService";
 
 import "../styles/Signin.css";
-import supermanImage from "../../images/superman.png";
+import databaseImage from "../../images/db.png";
 
 const Signin = (props) => {
   const handleSubmit = async (values) => {
@@ -105,7 +105,7 @@ const Signin = (props) => {
           </div>
 
           <div className="Signin__col d-none d-md-block col-md-6">
-            <img src={supermanImage} alt="Superman" className="img-fluid p-4" />
+            <img src={databaseImage} alt="Superman" className="img-fluid p-4" />
           </div>
         </div>
       </div>

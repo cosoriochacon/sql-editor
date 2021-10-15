@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Navbar.css";
-import logo from "../../../images/superman.png";
+import logo from "../../../images/db2.png";
 import AuthService from "../../../services/authService";
 
 const user = AuthService.getCurrentUser();
@@ -23,9 +23,15 @@ const LayoutNav = () => {
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <Link className="nav-link" to="/editor">
-                  <span className="Navbar__font_li">Editor</span>
-                </Link>
+                {user && (
+                  <>
+                    {Object.keys(user).length > 0 && (
+                      <Link className="nav-link" to="/editor">
+                        <span className="Navbar__font_li">Editor</span>
+                      </Link>
+                    )}
+                  </>
+                )}
               </li>
             </ul>
           </div>
