@@ -1,0 +1,5 @@
+{
+  "header": { "tb_name": "tablach", "db_name": "co", "columns": 2 },
+  "columns": ["col1", "col2"],
+  "data": []
+}

@@ -26,7 +26,7 @@ const LayoutNav = () => {
                 {user && (
                   <>
                     {Object.keys(user).length > 0 && (
-                      <Link className="nav-link" to="/editor">
+                      <Link className="nav-link" to="/dbms">
                         <span className="Navbar__font_li">Editor</span>
                       </Link>
                     )}

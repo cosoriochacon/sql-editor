@@ -15,28 +15,32 @@ const deleteQuery = async (statements) => {
   let path = "files/" + nameFile;
   try {
     const file_res = await appendDataToFile(path, statements);
-    if (file_res === 200) {
+    if (file_res.code === 200) {
       let response = {
         status: 0,
         message: `Delete table ${nameTable} on server ${nameDB} successfull`,
+        table: file_res.table,
       };
       return response;
     } else if (file_res === 404) {
       let response = {
         status: 1,
         message: `The value ${value} is not in the table ${nameTable}`,
+        table: {},
       };
       return response;
     } else if (file_res === 400) {
       let response = {
         status: 1,
         message: `Table ${nameTable} does not exists on the server`,
+        table: {},
       };
       return response;
     } else if (file_res === 403) {
       let response = {
         status: 1,
         message: `Column ${column} does not exist in table ${nameTable}`,
+        table: {},
       };
       return response;
     }
@@ -44,6 +48,7 @@ const deleteQuery = async (statements) => {
     let response = {
       status: 1,
       message: "Syntax Error",
+      table: {},
     };
     return response;
   }
@@ -84,7 +89,7 @@ const appendDataToFile = async (path, statements) => {
     let json = JSON.stringify(obj);
     await fs.writeFileSync(path, json, "utf-8");
 
-    return 200;
+    return { code: 200, table: obj };
   } else {
     return 400;
   }

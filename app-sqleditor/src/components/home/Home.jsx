@@ -14,13 +14,18 @@ const Home = () => {
               Welcome to the management system SQL
               <b className="font-yellow">Editor</b>
             </h1>
-            <Link className="btn btn-primary" to="/editor">
+            <Link className="btn btn-primary" to="/dbms">
               Get Started
             </Link>
           </div>
 
           <div className="Home__col d-none d-md-block col-md-8">
-            <img src={databaseImage} alt="Superman" className="img-fluid p-4" />
+            <img
+              src={databaseImage}
+              alt="Superman"
+              className="img-fluid p-4"
+              style={{ width: "50%" }}
+            />
           </div>
         </div>
       </div>

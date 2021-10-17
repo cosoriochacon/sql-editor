@@ -13,16 +13,18 @@ const dropQuery = async (statements) => {
     let nameFile = nameTable + ".json";
     let path = "files/" + nameFile;
     const file_res = await dropFile(path);
-    if (file_res === 200) {
+    if (file_res.code === 200) {
       let response = {
         status: 0,
         message: `Drop table ${nameTable} on server ${nameDB} successfull`,
+        table: file_res.table,
       };
       return response;
     } else if (file_res === 400) {
       let response = {
         status: 1,
         message: `Table ${nameTable} does not exists on the server`,
+        table: {},
       };
       return response;
     }
@@ -30,6 +32,7 @@ const dropQuery = async (statements) => {
     let response = {
       status: 1,
       message: "Syntax Error",
+      table: {},
     };
     return response;
   }
@@ -44,8 +47,11 @@ const dropQuery = async (statements) => {
 const dropFile = async (path) => {
   let file = fs.existsSync(path);
   if (file) {
+    const oldBuffer = await fs.promises.readFile(path);
+    const oldContent = oldBuffer.toString();
+    obj = JSON.parse(oldContent);
     fs.unlinkSync(path);
-    return 200;
+    return { code: 200, table: obj };
   } else {
     return 400;
   }

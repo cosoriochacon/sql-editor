@@ -1,5 +1,4 @@
 const fs = require("fs");
-const { get } = require("https");
 
 /**
  * Parseo de query: Insert

@@ -54,7 +54,6 @@ const EditorCreate = () => {
   };
 
   const handleSaveFile = async () => {
-    console.log("handleSaveFile");
     let query = querys.querys[0];
     let body = { query: query };
     let url;

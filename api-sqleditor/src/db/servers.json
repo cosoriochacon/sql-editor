@@ -1,18 +1,18 @@
 [
   {
     "key": "CO",
-    "value": "Servicor Local"
+    "value": "Servidor Local CO"
   },
   {
     "key": "VM",
-    "value": "Servidor Victor"
+    "value": "Servidor Victor VM"
   },
   {
     "key": "WS",
-    "value": "Servidor Walter"
+    "value": "Servidor Walter WS"
   },
   {
     "key": "MP",
-    "value": "Servidor Miguel"
+    "value": "Servidor Miguel MP"
   }
 ]

@@ -105,7 +105,12 @@ const Signin = (props) => {
           </div>
 
           <div className="Signin__col d-none d-md-block col-md-6">
-            <img src={databaseImage} alt="Superman" className="img-fluid p-4" />
+            <img
+              src={databaseImage}
+              alt="Superman"
+              className="img-fluid p-4"
+              style={{ width: "70%" }}
+            />
           </div>
         </div>
       </div>

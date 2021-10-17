@@ -21,6 +21,7 @@ const insertQuery = async (statements) => {
       let response = {
         status: 1,
         message: `Table ${nameTable} does not exists on the server`,
+        table: {},
       };
       return response;
     }
@@ -33,6 +34,7 @@ const insertQuery = async (statements) => {
       let response = {
         status: 1,
         message: "The length of the columns and the values is not equal",
+        table: {},
       };
       return response;
     }
@@ -42,6 +44,7 @@ const insertQuery = async (statements) => {
         status: 1,
         message:
           "The length of the columns does not match the columns in the table",
+        table: {},
       };
       return response;
     }
@@ -54,10 +57,11 @@ const insertQuery = async (statements) => {
       }
     }
     const file_res = await appendDataToFile(path, arr_data.toString());
-    if (file_res === 200) {
+    if (file_res.code === 200) {
       let response = {
         status: 0,
         message: `Insert into table ${nameTable} on server ${nameDB} successfully`,
+        table: file_res.table,
       };
       return response;
     }
@@ -85,7 +89,7 @@ const appendDataToFile = async (path, data) => {
     obj.data.push(data.split(","));
     let json = JSON.stringify(obj);
     await fs.writeFileSync(path, json, "utf-8");
-    return 200;
+    return { code: 200, table: obj };
   }
 };
 

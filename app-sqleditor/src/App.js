@@ -9,6 +9,9 @@ import Signin from "./components/sessions/Signin";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import EditorWizard from "./components/editor/EditorWizard";
+import Editor from "./components/editor/Editor";
+
+import "moment/locale/es";
 
 const App = () => {
   return (
@@ -23,6 +26,7 @@ const App = () => {
           />
           <PrivateRoute component={Home} path="/" exact />
           <PrivateRoute component={EditorWizard} path="/editor" exact />
+          <PrivateRoute component={Editor} path="/dbms" exact />
           <Route component={Error}></Route>
         </Switch>
       </Layout>
