@@ -6,53 +6,53 @@ const fs = require("fs");
  * @returns Valores insertados
  */
 const insertQuery = async (statements) => {
-  let arr_data = [];
-  let into = statements.into.name;
-  let nameTable = into.split(".")[1].trim();
-  let nameDB = into.split(".")[0].trim();
-  let results = statements.result[0].expression;
-  let columns = statements.into.columns;
-  let nameFile = nameTable + ".json";
-  let path = "files/" + nameFile;
-
-  const fileCurrent = await checkFileExists(path);
-  if (!fileCurrent) {
-    let response = {
-      status: 1,
-      message: `Table ${nameTable} does not exists on the server`,
-    };
-    return response;
-  }
-
-  const data = fs.readFileSync(path, { encoding: "utf8", flag: "r" });
-  let jsonData = JSON.parse(data);
-  let numberColumns = jsonData.header.columns;
-
-  if (results.length !== columns.length) {
-    let response = {
-      status: 1,
-      message: "The length of the columns and the values is not equal",
-    };
-    return response;
-  }
-
-  if (columns.length != numberColumns) {
-    let response = {
-      status: 1,
-      message:
-        "The length of the columns does not match the columns in the table",
-    };
-    return response;
-  }
-
-  for (let i = 0; i < numberColumns; i++) {
-    try {
-      arr_data.push(results[i].name);
-    } catch (error) {
-      arr_data.push(null);
-    }
-  }
   try {
+    let arr_data = [];
+    let into = statements.into.name;
+    let nameTable = into.split(".")[1].trim();
+    let nameDB = into.split(".")[0].trim();
+    let results = statements.result[0].expression;
+    let columns = statements.into.columns;
+    let nameFile = nameTable + ".json";
+    let path = "files/" + nameFile;
+
+    const fileCurrent = await checkFileExists(path);
+    if (!fileCurrent) {
+      let response = {
+        status: 1,
+        message: `Table ${nameTable} does not exists on the server`,
+      };
+      return response;
+    }
+
+    const data = fs.readFileSync(path, { encoding: "utf8", flag: "r" });
+    let jsonData = JSON.parse(data);
+    let numberColumns = jsonData.header.columns;
+
+    if (results.length !== columns.length) {
+      let response = {
+        status: 1,
+        message: "The length of the columns and the values is not equal",
+      };
+      return response;
+    }
+
+    if (columns.length != numberColumns) {
+      let response = {
+        status: 1,
+        message:
+          "The length of the columns does not match the columns in the table",
+      };
+      return response;
+    }
+
+    for (let i = 0; i < numberColumns; i++) {
+      try {
+        arr_data.push(results[i].name);
+      } catch (error) {
+        arr_data.push(null);
+      }
+    }
     const file_res = await appendDataToFile(path, arr_data.toString());
     if (file_res === 200) {
       let response = {

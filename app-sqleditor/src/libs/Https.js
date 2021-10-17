@@ -35,7 +35,7 @@ class Http {
     } catch (err) {
       console.log("http post method err", err);
 
-      throw Error(err);
+      // throw Error(err);
     }
   };
 

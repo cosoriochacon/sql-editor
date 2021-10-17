@@ -6,6 +6,7 @@ import EditorInsert from "./EditorInsert";
 import EditorUpdate from "./EditorUpdate";
 import EditorDelete from "./EditorDelete";
 import EditorDrop from "./EditorDrop";
+import EditorSelect from "./EditorSelect";
 import EditorWizardNav from "./EditorWizardNav";
 
 const EditorRemoteWizard = () => {
@@ -23,6 +24,7 @@ const EditorRemoteWizard = () => {
             <EditorDelete hashkey={"third"}></EditorDelete>
             <EditorUpdate hashkey={"fourth"}></EditorUpdate>
             <EditorDrop hashkey={"fifth"}></EditorDrop>
+            <EditorSelect hashkey={"sixth"}></EditorSelect>
           </StepWizard>
         </div>
       </div>

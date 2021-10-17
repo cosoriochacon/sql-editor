@@ -57,7 +57,7 @@ const EditorDrop = () => {
     let query = querys.querys[0];
     let body = { query: query };
     let url;
-    if (schema === "VA") {
+    if (schema === "VM") {
       url = process.env.REACT_APP_URL_SERVER_VICTOR;
     } else if (schema === "WS") {
       url = process.env.REACT_APP_URL_SERVER_WALTER;
