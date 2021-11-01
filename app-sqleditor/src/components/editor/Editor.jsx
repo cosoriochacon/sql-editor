@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
-import Https from "../../libs/Https";
 import { Formik } from "formik";
+import { HiDatabase } from "react-icons/hi";
+import { Accordion, Card } from "react-bootstrap";
 import swal from "sweetalert2";
 import sqliteParser from "sqlite-parser";
 
 import moment from "moment";
 
+import Https from "../../libs/Https";
 import Wizard from "../pages/Wizard";
 
 const Editor = () => {
   const [logs, setLogs] = useState([]);
+  const [tables, setTables] = useState([]);
   const [table, setTable] = useState({});
 
   const queryParser = async (query) => {
@@ -56,7 +59,7 @@ const Editor = () => {
       return;
     }
 
-    if (url != undefined) {
+    if (url !== undefined) {
       const res = await Https.postRemote(url + "/parseQuery", query);
       await addLog(res);
       setTable(res.table);
@@ -92,19 +95,66 @@ const Editor = () => {
     setLogs(res);
   };
 
+  const getTables = async () => {
+    const res = await Https.get("databases");
+    setTables(res);
+  };
+
   const addLog = async (body) => {
     await Https.post("logs", body);
   };
 
   useEffect(() => {
     getLogs();
+    getTables();
     setTable({});
   }, []);
 
   return (
     <div style={{ margin: "20px" }}>
       <div className="row">
-        <div className="col-7">
+        <div className="col-3">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">Tables</h5>
+              {tables.length > 0 ? (
+                <>
+                  {tables.map((item, ind) => (
+                    <Card key={ind} className="mb-3 shadow-sm">
+                      <Accordion defaultActiveKey="0">
+                        <Accordion.Item eventKey={ind}>
+                          <Accordion.Header>
+                            <p className="text-muted">
+                              <span className="badge bg-primary rounded-pill">
+                                <HiDatabase></HiDatabase>
+                              </span>{" "}
+                              {item.name}
+                            </p>
+                          </Accordion.Header>
+                          <Accordion.Body>
+                            {item.columns.map((item, id) => (
+                              <div key={id}>
+                                <div className="row">
+                                  <div className="col-10">
+                                    <p>{item}</p>
+                                  </div>
+                                </div>
+                                <hr></hr>
+                              </div>
+                            ))}
+                          </Accordion.Body>
+                        </Accordion.Item>
+                      </Accordion>
+                    </Card>
+                  ))}
+                </>
+              ) : (
+                <p className="text-muted">Not results</p>
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="col-5">
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">Editor</h5>
@@ -132,7 +182,7 @@ const Editor = () => {
             </div>
           </div>
         </div>
-        <div className="col-5">
+        <div className="col-4">
           <div className="card">
             <div className="card-body">
               <Wizard logs={logs} table={table}></Wizard>

@@ -14,7 +14,7 @@ const Home = () => {
               Welcome to the management system SQL
               <b className="font-yellow">Editor</b>
             </h1>
-            <Link className="btn btn-primary" to="/dbms">
+            <Link className="btn btn-primary" to="/editor">
               Get Started
             </Link>
           </div>

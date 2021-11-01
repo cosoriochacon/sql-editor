@@ -61,9 +61,22 @@ const createQuery = async (statements) => {
 const appendDataToFile = async (path, data) => {
   let file = fs.existsSync(path);
   if (!file) {
+    let newPath = "src/db/databases.json";
+    let dataJson = JSON.parse(data);
+    let newColumns = dataJson.columns;
+    let newName = dataJson.header.tb_name;
+    const oldBuffer = await fs.promises.readFile(newPath);
+    const oldContent = oldBuffer.toString();
+    obj = JSON.parse(oldContent);
     await fs.promises.appendFile(path, data);
     const newBuffer = await fs.promises.readFile(path);
     const newContent = newBuffer.toString();
+    let newIItem = {
+      name: newName,
+      columns: newColumns,
+    };
+    obj.push(newIItem);
+    await fs.writeFileSync(newPath, JSON.stringify(obj), "utf-8");
     let response;
     if (newContent.length > 0) {
       response = 200;

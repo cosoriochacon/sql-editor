@@ -19,7 +19,12 @@ const Error = () => {
             </Link>
           </div>
           <div className="Error__col d-none d-md-block col-md-8">
-            <img src={databaseImage} alt="Superman" className="img-fluid p-4" />
+            <img
+              src={databaseImage}
+              alt="Superman"
+              className="img-fluid p-4"
+              style={{ width: "50%" }}
+            />
           </div>
         </div>
       </div>

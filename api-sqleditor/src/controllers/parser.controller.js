@@ -1,6 +1,8 @@
 const path = require("path");
 const DB_PATH = path.join(__dirname + "/../db/logs.json");
+const DATABASES_PATH = path.join(__dirname + "/../db/databases.json");
 let db = require(DB_PATH);
+let db2 = require(DATABASES_PATH);
 const fs = require("fs");
 const moment = require("moment");
 
@@ -90,6 +92,14 @@ class UserController {
     db.push(message);
     fs.writeFileSync(DB_PATH, JSON.stringify(db));
     return res.json({ message: "OK log" });
+  }
+
+  async getDatabases(req, res) {
+    let array = [];
+    for (let i = db2.length - 1; i >= 0; i--) {
+      await array.push(db2[i]);
+    }
+    return await res.json(array);
   }
 }
 
