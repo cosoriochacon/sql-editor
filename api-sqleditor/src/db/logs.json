@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "id": 1,
+    "date": "November 1, 2021 12:02 AM",
+    "created_at": "November 1, 2021"
+  },
+  {
+    "id": 2,
+    "status": 1,
+    "message": "Table tabla_h already exists on the server",
+    "date": "November 1, 2021 12:03 AM",
+    "created_at": "November 1, 2021"
+  }
+]

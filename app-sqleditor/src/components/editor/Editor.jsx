@@ -4,6 +4,8 @@ import { Formik } from "formik";
 import swal from "sweetalert2";
 import sqliteParser from "sqlite-parser";
 
+import moment from "moment";
+
 import Wizard from "../pages/Wizard";
 
 const Editor = () => {
@@ -29,6 +31,7 @@ const Editor = () => {
   };
 
   const handleSubmit = async (query) => {
+    console.log(moment().format("LLL"));
     let db = await queryParser(query.query);
     db = db.toUpperCase();
     let url;
@@ -48,16 +51,14 @@ const Editor = () => {
         text: "Server does not exist",
         timer: 2500,
       });
+      let res = { status: 1, message: `Server does ${db} not exist` };
+      await addLog(res);
       return;
     }
 
     if (url != undefined) {
-      const res = await Https.postRemote(
-        "http://localhost:5050" + "/parseQuery",
-        query
-      );
+      const res = await Https.postRemote(url + "/parseQuery", query);
       await addLog(res);
-      console.log(res);
       setTable(res.table);
       if (res.status === 1) {
         swal.fire({
