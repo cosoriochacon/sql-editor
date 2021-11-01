@@ -10,7 +10,6 @@ const selectQuery = async (statements) => {
     let from = statements.from.name;
     let nameTable = from.split(".")[1].trim();
     let nameDB = from.split(".")[0].trim();
-    let results = statements.result;
     let nameFile = nameTable + ".json";
     let path = "files/" + nameFile;
 
@@ -27,6 +26,7 @@ const selectQuery = async (statements) => {
       let response = {
         status: 1,
         message: `Table ${nameTable} does not exists on the server`,
+        table: {},
       };
       return response;
     }

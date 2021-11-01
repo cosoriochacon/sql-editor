@@ -2,44 +2,61 @@ import React, { useEffect, useState } from "react";
 import Https from "../../libs/Https";
 import { Formik } from "formik";
 import swal from "sweetalert2";
+import sqliteParser from "sqlite-parser";
 
 import Wizard from "../pages/Wizard";
 
 const Editor = () => {
-  const [servers, setServers] = useState([]);
   const [logs, setLogs] = useState([]);
-  const [schema, setSchema] = useState(null);
   const [table, setTable] = useState({});
 
-  const getServers = async () => {
-    const res = await Https.get("schemas");
-    setServers(res);
-  };
-
-  const handleCheck = async (values) => {
-    setSchema(values.key);
+  const queryParser = async (query) => {
+    try {
+      const ast = sqliteParser(query);
+      let sts = ast.statement[0];
+      if (sts.variant === "create") {
+        return sts.name.name.split(".")[0].trim();
+      } else if (sts.variant === "insert" || sts.variant === "update") {
+        return sts.into.name.split(".")[0].trim();
+      } else if (sts.variant === "delete" || sts.variant === "select") {
+        return sts.from.name.split(".")[0].trim();
+      } else if (sts.variant === "drop") {
+        return sts.target.name.split(".")[0].trim();
+      }
+    } catch (error) {
+      return error;
+    }
   };
 
   const handleSubmit = async (query) => {
-    if (schema == null) {
-      swal.fire({
-        icon: "warning",
-        title: "Oops!",
-        text: "You have not selected the server",
-        confirmButtonColor: "#249B83",
-      });
+    let db = await queryParser(query.query);
+    db = db.toUpperCase();
+    let url;
+    if (db === "VM") {
+      url = process.env.REACT_APP_URL_SERVER_VICTOR;
+    } else if (db === "WS") {
+      url = process.env.REACT_APP_URL_SERVER_WALTER;
+    } else if (db === "MP") {
+      url = process.env.REACT_APP_URL_SERVER_MIGUEL;
+    } else if (db === "CO") {
+      url = process.env.REACT_APP_URL_SERVER_LOCAL;
     } else {
-      let url;
-      if (schema === "VM") {
-        url = process.env.REACT_APP_URL_SERVER_VICTOR;
-      } else if (schema === "WS") {
-        url = process.env.REACT_APP_URL_SERVER_WALTER;
-      } else if (schema === "MP") {
-        url = process.env.REACT_APP_URL_SERVER_MIGUEL;
-      } else if (schema === "CO") {
-        url = process.env.REACT_APP_URL_SERVER_LOCAL;
-      }
-      const res = await Https.postRemote(url + "/parseQuery", query);
+      swal.fire({
+        icon: "error",
+        title: "Error!",
+        confirmButtonColor: "#249B83",
+        text: "Server does not exist",
+        timer: 2500,
+      });
+      return;
+    }
+
+    if (url != undefined) {
+      const res = await Https.postRemote(
+        "http://localhost:5050" + "/parseQuery",
+        query
+      );
+      await addLog(res);
       console.log(res);
       setTable(res.table);
       if (res.status === 1) {
@@ -74,8 +91,11 @@ const Editor = () => {
     setLogs(res);
   };
 
+  const addLog = async (body) => {
+    await Https.post("logs", body);
+  };
+
   useEffect(() => {
-    getServers();
     getLogs();
     setTable({});
   }, []);
@@ -83,52 +103,12 @@ const Editor = () => {
   return (
     <div style={{ margin: "20px" }}>
       <div className="row">
-        <div className="col-3">
-          <div className="card" style={{ backgroundColor: "#F2F3F4" }}>
-            <div className="card-body">
-              <h5 className="card-title">Servers</h5>
-              {servers.length > 0 ? (
-                <>
-                  {servers.map((item, ind) => (
-                    <div key={ind}>
-                      <div className="list-group list-group-numbered">
-                        <div className="list-group-item d-flex justify-content-between align-items-start">
-                          <div className="ms-2 me-auto">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="radio"
-                                name="flexRadioDefault"
-                                onClick={() => handleCheck(item)}
-                              />
-                              <p className="text-muted">{item.value}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <br />
-                    </div>
-                  ))}
-                </>
-              ) : (
-                <p className="text-muted">Not results</p>
-              )}
-            </div>
-          </div>
-        </div>
-        <div className="col-5">
+        <div className="col-7">
           <div className="card">
             <div className="card-body">
+              <h5 className="card-title">Editor</h5>
               <Formik initialValues={{ query: "" }} onSubmit={handleSubmit}>
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                  isSubmitting,
-                }) => (
+                {({ handleChange, handleBlur, handleSubmit }) => (
                   <form onSubmit={handleSubmit}>
                     <textarea
                       className="form-control"
@@ -151,7 +131,7 @@ const Editor = () => {
             </div>
           </div>
         </div>
-        <div className="col-4">
+        <div className="col-5">
           <div className="card">
             <div className="card-body">
               <Wizard logs={logs} table={table}></Wizard>

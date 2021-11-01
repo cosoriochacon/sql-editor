@@ -2,6 +2,9 @@ import React from "react";
 import { Table, Card } from "react-bootstrap";
 
 const Results = (props) => {
+  if (!props.table) {
+    return null;
+  }
   return (
     <div style={{ height: "400px" }}>
       {Object.keys(props.table).length > 0 ? (

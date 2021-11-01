@@ -92,7 +92,7 @@ const Signin = (props) => {
                         <button
                           type="submit"
                           disabled={isSubmitting}
-                          className="btn btn-success"
+                          className="btn btn-primary"
                         >
                           Sign In
                         </button>

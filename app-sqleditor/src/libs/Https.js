@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5050/api/";
+const API_URL = "https://apisqleditornodejs.herokuapp.com/api/";
 
 class Http {
   get = async (url) => {
