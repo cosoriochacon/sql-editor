@@ -8,7 +8,10 @@ const fs = require("fs");
 const updateQuery = async (statements) => {
   try {
     let into = statements.into.name;
-    let column = statements.where[0].left.name;
+    let column;
+    if (statements.where !== undefined) {
+      column = statements.where[0].left.name;
+    }
     let nameTable = into.split(".")[1].trim();
     let nameDB = into.split(".")[0].trim();
     let nameFile = nameTable + ".json";
@@ -72,14 +75,7 @@ const appendDataToFile = async (path, statements) => {
     const oldBuffer = await fs.promises.readFile(path);
     const oldContent = oldBuffer.toString();
     obj = JSON.parse(oldContent);
-    let pos_where = obj.columns.indexOf(statements.where[0].left.name);
-
-    if (pos_where === -1) return 408;
-
-    if (statements.where[0].operation !== "=") return 403;
-
-    if (statements.where.length !== 1) return 406;
-
+    
     let index_columns = {};
     for (let i = 0; i < obj.columns.length; i++) {
       index_columns[obj.columns[i]] = i;
@@ -92,16 +88,33 @@ const appendDataToFile = async (path, statements) => {
       columns_modify.push(statements.set[i].target.name);
     }
 
-    let value = statements.where[0].right.name;
-    let cont = 0;
-    for (let i = 0; i < obj.data.length; i++) {
-      if (value === obj.data[i][pos_where]) {
-        cont++;
+    if (statements.where !== undefined) {
+      let pos_where = obj.columns.indexOf(statements.where[0].left.name);
+
+      if (pos_where === -1) return 408;
+  
+      if (statements.where[0].operation !== "=") return 403;
+  
+      if (statements.where.length !== 1) return 406;
+  
+      let value = statements.where[0].right.name;
+      let cont = 0;
+      for (let i = 0; i < obj.data.length; i++) {
+        if (value === obj.data[i][pos_where]) {
+          cont++;
+          for (let j = 0; j < columns_modify.length; j++) {
+            obj.data[i][index_columns[columns_modify[j]]] = data_modify[j];
+          }
+        }
+      }
+    } else {
+      for (let i = 0; i < obj.data.length; i++) {
         for (let j = 0; j < columns_modify.length; j++) {
           obj.data[i][index_columns[columns_modify[j]]] = data_modify[j];
         }
       }
     }
+
 
     let json = JSON.stringify(obj);
     await fs.writeFileSync(path, json, "utf-8");
