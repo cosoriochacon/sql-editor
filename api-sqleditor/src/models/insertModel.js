@@ -51,7 +51,11 @@ const insertQuery = async (statements) => {
 
     for (let i = 0; i < numberColumns; i++) {
       try {
-        arr_data.push(results[i].name);
+        if (results[i].name !== undefined) {
+          arr_data.push(results[i].name);  
+        } else {
+          arr_data.push(results[i].value);
+        }
       } catch (error) {
         arr_data.push(null);
       }

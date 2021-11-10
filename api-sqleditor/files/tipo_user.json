@@ -1,0 +1,9 @@
+{
+  "header": { "tb_name": "tipo_user", "db_name": "co", "columns": 2 },
+  "columns": ["id", "name"],
+  "data": [
+    ["1", "estudiante"],
+    ["2", "catedratico"],
+    ["3", "auxiliar"]
+  ]
+}

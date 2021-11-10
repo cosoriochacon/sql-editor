@@ -1,0 +1,1 @@
+[{"name":"users","columns":["id","name","pass"]},{"name":"tipo_user","columns":["id","name"]},{"name":"logs","columns":["query","origin","status","message","timestamp"]}]

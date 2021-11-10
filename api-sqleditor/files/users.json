@@ -1,0 +1,9 @@
+{
+  "header": { "tb_name": "users", "db_name": "co", "columns": 3 },
+  "columns": ["id", "name", "pass"],
+  "data": [
+    ["1", "christian", "test"],
+    ["2", "david", "test"],
+    ["2", "juan", "test"]
+  ]
+}

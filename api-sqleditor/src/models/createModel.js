@@ -8,6 +8,7 @@ const fs = require("fs");
 const createQuery = async (statements) => {
   try {
     let columns = [];
+    let duplicates = [];
     let into = statements.name.name;
     let nameTable = into.split(".")[1].trim();
     let nameDB = into.split(".")[0].trim();
@@ -15,8 +16,29 @@ const createQuery = async (statements) => {
     for (let i = 0; i < arr_columns.length; i++) {
       columns.push(arr_columns[i].name);
     }
+    
+    let temp = [...columns].sort();
+
+    for (let i = 0; i < temp.length; i++) {
+      if (temp[i + 1] === temp[i]) {
+        duplicates.push(temp[i]);
+      }
+    }
+    let str_duplicates = duplicates.toString();
+    if (duplicates.length > 0) {
+      let response = {
+        status: 1,
+        message: `Columnas duplicadas ${str_duplicates} al crear la tabla: ${nameTable} `,
+        table: {},
+      };
+      return response;
+    }
+
+
     let name = nameTable + ".json";
     let path = "files/" + name;
+
+
     let newIItem = {
       header: {
         tb_name: nameTable,
@@ -61,22 +83,9 @@ const createQuery = async (statements) => {
 const appendDataToFile = async (path, data) => {
   let file = fs.existsSync(path);
   if (!file) {
-    let newPath = "src/db/databases.json";
-    let dataJson = JSON.parse(data);
-    let newColumns = dataJson.columns;
-    let newName = dataJson.header.tb_name;
-    const oldBuffer = await fs.promises.readFile(newPath);
-    const oldContent = oldBuffer.toString();
-    obj = JSON.parse(oldContent);
     await fs.promises.appendFile(path, data);
     const newBuffer = await fs.promises.readFile(path);
     const newContent = newBuffer.toString();
-    let newIItem = {
-      name: newName,
-      columns: newColumns,
-    };
-    obj.push(newIItem);
-    await fs.writeFileSync(newPath, JSON.stringify(obj), "utf-8");
     let response;
     if (newContent.length > 0) {
       response = 200;

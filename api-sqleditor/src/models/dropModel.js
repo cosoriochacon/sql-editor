@@ -12,7 +12,7 @@ const dropQuery = async (statements) => {
     let nameDB = target.split(".")[0].trim();
     let nameFile = nameTable + ".json";
     let path = "files/" + nameFile;
-    const file_res = await dropFile(path, nameTable);
+    const file_res = await dropFile(path);
     if (file_res.code === 200) {
       let response = {
         status: 0,
@@ -44,21 +44,14 @@ const dropQuery = async (statements) => {
  * @param {*} statements Genero por el query
  * @returns
  */
-const dropFile = async (path, nameTable) => {
+const dropFile = async (path) => {
   let file = fs.existsSync(path);
   if (file) {
-    let newPath = "src/db/databases.json";
-    const oldBuffer = await fs.promises.readFile(newPath);
+    const oldBuffer = await fs.promises.readFile(path);
     const oldContent = oldBuffer.toString();
     obj = JSON.parse(oldContent);
-    if (obj.length > 0) {
-      for (let i = 0; i < obj.length; i++) {
-        if (obj[i].name === nameTable) obj.splice(i, 1);
-      }
-    }
-    await fs.writeFileSync(newPath, JSON.stringify(obj), "utf-8");
     fs.unlinkSync(path);
-    return { code: 200, table: {} };
+    return { code: 200, table: obj };
   } else {
     return 400;
   }
