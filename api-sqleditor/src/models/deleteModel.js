@@ -12,7 +12,12 @@ const deleteQuery = async (statements) => {
     let value;
     if (statements.where !== undefined) {
       column = statements.where[0].left.name;
-      value = statements.where[0].right.name;
+      if (statements.where[0].right.name !== undefined) {
+        value = statements.where[0].right.name; 
+      } else {
+        value = statements.where[0].right.value;
+      }
+      
     }
     let nameTable = from.split(".")[1].trim();
     let nameDB = from.split(".")[0].trim();
@@ -74,11 +79,17 @@ const appendDataToFile = async (path, statements) => {
     if (statements.where !== undefined) {
       let pos_where = obj.columns.indexOf(statements.where[0].left.name);
       if (pos_where === -1) return 403;
-      let value = statements.where[0].right.name;
+      let value;
+      if (statements.where[0].right.name !== undefined) {
+        value = statements.where[0].right.name;
+      } else {
+        value = statements.where[0].right.value;
+      }
       let pos_data;
   
       for (let i = 0; i < obj.data.length; i++) {
-        if (obj.data[i][pos_where] === statements.where[0].right.name) {
+        if (obj.data[i][pos_where] === statements.where[0].right.name || 
+          obj.data[i][pos_where] === statements.where[0].right.value) {
           pos_data = i;
         }
       }

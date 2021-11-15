@@ -1,1 +1,1 @@
-[{"name":"users","columns":["id","name","pass"]},{"name":"tipo_user","columns":["id","name"]},{"name":"logs","columns":["query","origin","status","message","timestamp"]}]
+[{"name":"users","columns":["id","name","pass"]},{"name":"tipo_user","columns":["id","name"]},{"name":"logs","columns":["query","origin","status","message","timestamp"]},{"name":"tabla1","columns":["col1","col2","col3"]}]

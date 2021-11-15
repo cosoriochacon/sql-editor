@@ -6,6 +6,7 @@ const fs = require("fs");
  * @returns Valores editados
  */
 const updateQuery = async (statements) => {
+  console.log("updateQuery");
   try {
     let into = statements.into.name;
     let column;
@@ -84,7 +85,11 @@ const appendDataToFile = async (path, statements) => {
     let data_modify = [];
     let columns_modify = [];
     for (let i = 0; i < statements.set.length; i++) {
-      data_modify.push(statements.set[i].value.name);
+      if (statements.set[i].value.name !== undefined) {
+        data_modify.push(statements.set[i].value.name);
+      } else {
+        data_modify.push(statements.set[i].value.value);
+      }
       columns_modify.push(statements.set[i].target.name);
     }
 
